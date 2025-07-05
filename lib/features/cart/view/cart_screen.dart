@@ -1,10 +1,155 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_mart/core/utils/logger/logger.dart';
+import 'package:grocery_mart/core/utils/toast/toast_message.dart';
+import 'package:grocery_mart/data/models/cart_item.dart';
+import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
+import 'package:grocery_mart/features/cart/controller/cart_event.dart';
+import 'package:grocery_mart/features/cart/controller/cart_state.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    super.initState();
+    debug('Called');
+    context.read<CartBloc>().add(GetCartItemsEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Cart Screen"));
+    return Scaffold(
+      appBar: AppBar(title: const Text('My Cart'), centerTitle: true),
+      body: BlocConsumer<CartBloc, CartState>(
+        builder: (context, state) {
+          if (state is CartSuccessState) {
+            if (state.cartItems.isEmpty) {
+              return Center(child: Text("No Product Found in Cart"));
+            }
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: state.cartItems.length,
+                itemBuilder: (context, index) {
+                  CartItem cartItem = state.cartItems[index];
+                  return Container(
+                    height: 110,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: Colors.grey)),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.network(cartItem.thumbnail),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              cartItem.title,
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Category: ${cartItem.category}',
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(color: Colors.grey),
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    context.read<CartBloc>().add(
+                                      DecreaseCartItemQuantityEvent(
+                                        cartItem: cartItem,
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(Icons.remove),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    // vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Text(
+                                    cartItem.quantity.toString(),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    context.read<CartBloc>().add(
+                                      IncreaseCartItemQuantityEvent(
+                                        cartItem: cartItem,
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(Icons.add),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                context.read<CartBloc>().add(
+                                  RemoveFromCartEvent(cartItem: cartItem),
+                                );
+                              },
+                              child: Icon(Icons.close),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 2.0),
+                              child: Text(
+                                '\$${cartItem.price}',
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          } else if (state is CartLoadingState) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is CartErrorState) {
+            return Center(child: Text(state.message));
+          } else {
+            return Center(child: Text("No Product Found in Cart"));
+          }
+        },
+        listener: (context, state) {
+          if (state is CartErrorState) {
+            ToastMessage.failure(message: state.message);
+          }
+        },
+      ),
+    );
   }
 }
