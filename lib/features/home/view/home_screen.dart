@@ -16,6 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+
         currentIndex: widget.navigationShell.currentIndex,
         onTap: (index) {
           try {
@@ -33,12 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             // icon: Image.asset(AppIcons.exploreProducts),
-            icon: Icon(Icons.manage_search_sharp, size: 35),
+            icon: Icon(Icons.manage_search_sharp, size: 25),
             label: 'Explore',
           ),
           BottomNavigationBarItem(
             // icon: Image.asset(AppIcons.cart),
-            icon: Icon(CupertinoIcons.cart, size: 35),
+            icon: Icon(CupertinoIcons.cart, size: 25),
             label: 'Cart',
           ),
         ],
