@@ -224,8 +224,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               );
               if (cartBloc.state is CartSuccessState) {
                 ToastMessage.success(message: "Product Added to Cart");
-              } else {
-                ToastMessage.failure(message: 'Something went wrong');
               }
             },
             buttonTitle: "Add to Cart",

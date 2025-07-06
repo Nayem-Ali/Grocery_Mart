@@ -48,7 +48,6 @@ final GoRouter appRoutes = GoRouter(
           ],
         ),
         StatefulShellBranch(
-          initialLocation: RoutesName.exploreProduct,
           routes: [
             GoRoute(
               name: RoutesName.exploreProduct,

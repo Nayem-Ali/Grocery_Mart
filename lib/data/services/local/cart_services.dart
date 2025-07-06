@@ -12,8 +12,9 @@ class CartServices {
 
   Future<bool> addProductToCart({required CartItem cartItem}) async {
     try {
-      List<String> cartItems =
-          sharedPreferenceManager.getValue(key: SharedPrefKeys.cart) ?? [];
+      List<String> cartItems = List<String>.from(
+        sharedPreferenceManager.getValue(key: SharedPrefKeys.cart) ?? [],
+      );
       debug(cartItems);
       String newCartItem = jsonEncode(cartItem.toJson());
       if (cartItems.contains(newCartItem)) {
@@ -52,8 +53,9 @@ class CartServices {
 
   Future<bool> removeProduceFromCart({required CartItem cartItem}) async {
     try {
-      List<String> cartItems =
-          sharedPreferenceManager.getValue(key: SharedPrefKeys.cart) ?? [];
+      List<String> cartItems = List<String>.from(
+        sharedPreferenceManager.getValue(key: SharedPrefKeys.cart) ?? [],
+      );
       if (cartItems.contains(jsonEncode(cartItem.toJson()))) {
         cartItems.remove(jsonEncode(cartItem.toJson()));
         return await sharedPreferenceManager.insertValue(

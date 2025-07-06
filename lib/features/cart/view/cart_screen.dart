@@ -198,21 +198,26 @@ class _CartScreenState extends State<CartScreen> {
                         buttonTitle: "Go to Checkout",
                       ),
                       Positioned(
-                        right: 20,
-                        top: 30,
+                        right: 35,
+                        top: 28,
                         child: Container(
-                          padding: const EdgeInsets.all(2),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2),
                             color: Colors.black12,
                           ),
-                          child: Text(
-                            '\$${HelperFunctions.calculateSubtotal(state.cartItems)}',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.labelSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Text(
+                              '\$${HelperFunctions.calculateSubtotal(state.cartItems)}',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelLarge?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
