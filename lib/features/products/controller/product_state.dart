@@ -28,3 +28,23 @@ class ProductFailureState extends ProductState {
   @override
   List<Object?> get props => [];
 }
+
+//
+// class CategorizedProductSuccessState extends ProductState {
+//   final List<Product> categorizedProducts;
+//
+//   const CategorizedProductSuccessState({required this.categorizedProducts});
+//
+//   @override
+//   List<Object?> get props => [];
+// }
+//
+// class CategorizedProductFailureState extends ProductState {
+//   @override
+//   List<Object?> get props => [];
+// }
+//
+// class CategorizedProductLoadingState extends ProductState {
+//   @override
+//   List<Object?> get props => [];
+// }

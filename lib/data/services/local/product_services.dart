@@ -11,6 +11,7 @@ class ProductServices {
         'assets/json/products.json',
       );
       final data = jsonDecode(response);
+      debug(data);
       return (data['products'] as List)
           .map((product) => Product.fromJson(product))
           .toList();

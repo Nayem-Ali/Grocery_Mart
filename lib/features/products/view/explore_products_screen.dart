@@ -1,17 +1,12 @@
-import 'dart:async';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grocery_mart/core/route/routes_name.dart';
-import 'package:grocery_mart/core/utils/logger/logger.dart';
 import 'package:grocery_mart/core/utils/toast/toast_message.dart';
 import 'package:grocery_mart/features/products/controller/product_bloc.dart';
 import 'package:grocery_mart/features/products/controller/product_event.dart';
 import 'package:grocery_mart/features/products/controller/product_state.dart';
-import 'package:grocery_mart/features/products/view/components/category_filter.dart';
-import 'package:grocery_mart/features/products/view/components/product_card.dart';
-import 'package:grocery_mart/features/shared/widgets/k_text_form_field.dart';
 
 class ExploreProductsScreen extends StatefulWidget {
   const ExploreProductsScreen({super.key});
@@ -21,9 +16,6 @@ class ExploreProductsScreen extends StatefulWidget {
 }
 
 class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  Timer? _debounce;
-
   @override
   void initState() {
     super.initState();
@@ -31,89 +23,14 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    _debounce?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Explore Products'),
-        centerTitle: true,
-        actions: [
-          // Sort Button
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              bool ascending = value == 'Low to High';
-              context.read<ProductBloc>().add(
-                SortProductByPriceEvent(doesAscending: ascending),
-              );
-            },
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(
-                    value: 'Low to High',
-                    child: Text('Price: Low to High'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'High to Low',
-                    child: Text('Price: High to Low'),
-                  ),
-                ],
-            icon: const Icon(Icons.sort),
-          ),
-
-          // Filter Button
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              final state = context.read<ProductBloc>().state;
-              List<String> categories = [];
-
-              if (state is ProductSuccessState) {
-                categories =
-                    state.products.map((e) => e.category).toSet().toList();
-              }
-
-              showBottomSheet(
-                backgroundColor: const Color(0xFFF2F3F2),
-                context: context,
-                builder: (context) {
-                  return Builder(
-                    builder: (context) {
-                      return CategoryFilter(categories: categories);
-                    },
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Explore Products'), centerTitle: true),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              KTextFormField(
-                textEditingController: _searchController,
-                hintText: 'Search',
-                prefixIcon: const Icon(Icons.search),
-                onChange: (value) {
-                  if (_debounce?.isActive ?? false) _debounce?.cancel();
-                  _debounce = Timer(const Duration(milliseconds: 500), () {
-                    // Call your search/filter logic here
-                    debug('Search query: $value');
-                    context.read<ProductBloc>().add(
-                      SearchProductEvent(searchKey: value),
-                    );
-                    // Example:
-                  });
-                },
-              ),
               const SizedBox(height: 10),
               Expanded(
                 child: BlocConsumer<ProductBloc, ProductState>(
@@ -126,25 +43,59 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
                     if (state is ProductLoadingState) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ProductSuccessState) {
-                      final products = state.products;
+                      final categories =
+                          state.products
+                              .map((e) => e.category)
+                              .toSet()
+                              .toList();
+                      final categoryImages =
+                          state.products
+                              .map((e) => e.categoryImage)
+                              .toSet()
+                              .toList();
                       return GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 2,
                               mainAxisSpacing: 2,
-                              mainAxisExtent: 270,
+                              mainAxisExtent: 250,
                             ),
-                        itemCount: products.length,
+                        itemCount: categories.length,
                         itemBuilder: (context, index) {
-                          final product = products[index];
                           return InkWell(
-                            onTap:
-                                () => context.pushNamed(
-                                  RoutesName.productDetails,
-                                  extra: product,
-                                ),
-                            child: ProductCard(product: product),
+                            onTap: () {
+                              context.pushNamed(
+                                RoutesName.categorizedProduct,
+                                extra: categories[index],
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              margin: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(
+                                  context,
+                                ).primaryColor.withOpacity(0.1),
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CachedNetworkImage(
+                                    height: 180,
+                                    imageUrl: categoryImages[index],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    categories[index],
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       );

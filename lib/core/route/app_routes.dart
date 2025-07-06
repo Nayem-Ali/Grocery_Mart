@@ -4,8 +4,10 @@ import 'package:grocery_mart/core/route/routes_name.dart';
 import 'package:grocery_mart/data/models/product.dart';
 import 'package:grocery_mart/features/cart/view/cart_screen.dart';
 import 'package:grocery_mart/features/home/view/home_screen.dart';
+import 'package:grocery_mart/features/products/view/categorized_products_screen.dart';
 import 'package:grocery_mart/features/products/view/explore_products_screen.dart';
 import 'package:grocery_mart/features/products/view/product_details_screen.dart';
+import 'package:grocery_mart/features/shared/view/navigation_screen.dart';
 import 'package:grocery_mart/features/shared/view/splash_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -14,10 +16,10 @@ final GlobalKey<NavigatorState> sectionNavigatorKey =
 
 final GoRouter appRoutes = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/splash',
+  initialLocation: RoutesName.splash,
   routes: [
     GoRoute(
-      name: "/splash",
+      name: RoutesName.splash,
       path: RoutesName.splash,
       builder: (context, state) {
         return const SplashScreen();
@@ -33,8 +35,18 @@ final GoRouter appRoutes = GoRouter(
     StatefulShellRoute.indexedStack(
       builder:
           (context, state, navigationShell) =>
-              HomeScreen(navigationShell: navigationShell),
+              NavigationScreen(navigationShell: navigationShell),
       branches: [
+        StatefulShellBranch(
+          initialLocation: RoutesName.home,
+          routes: [
+            GoRoute(
+              name: RoutesName.home,
+              path: RoutesName.home,
+              builder: (context, state) => HomeScreen(),
+            ),
+          ],
+        ),
         StatefulShellBranch(
           initialLocation: RoutesName.exploreProduct,
           routes: [
@@ -57,11 +69,19 @@ final GoRouter appRoutes = GoRouter(
       ],
     ),
     GoRoute(
-      path: "/productDetails",
+      path: RoutesName.productDetails,
       name: RoutesName.productDetails,
       builder: (context, state) {
         Product product = state.extra as Product;
         return ProductDetailsScreen(product: product);
+      },
+    ),
+    GoRoute(
+      path: RoutesName.categorizedProduct,
+      name: RoutesName.categorizedProduct,
+      builder: (context, state) {
+        String category = state.extra as String;
+        return CategorizedProductScreen(category: category);
       },
     ),
   ],
