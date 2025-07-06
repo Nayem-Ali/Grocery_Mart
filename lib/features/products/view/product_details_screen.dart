@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_mart/core/utils/toast/toast_message.dart';
@@ -6,6 +8,7 @@ import 'package:grocery_mart/data/models/product.dart';
 import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
 import 'package:grocery_mart/features/cart/controller/cart_event.dart';
 import 'package:grocery_mart/features/cart/controller/cart_state.dart';
+import 'package:grocery_mart/features/shared/widgets/k_elevated_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -28,7 +31,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         backgroundColor: Color(0xFFF2F3F2),
         title: const Text("Product Detail"),
         centerTitle: true,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.share))],
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.share)),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +49,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 bottomRight: Radius.circular(30),
               ),
               image: DecorationImage(
-                image: NetworkImage(product.thumbnail),
+                image: CachedNetworkImageProvider(product.thumbnail),
+                // image: NetworkImage(product.thumbnail),
                 fit: BoxFit.contain,
               ),
             ),
@@ -66,7 +72,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                   Text(
-                    'Category: ${product.category}',
+                    'Category: ${product.category} | Stock: ${product.stock}',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF7C7C7C),
@@ -88,7 +94,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             return Row(
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.remove),
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Color(0xFF7C7C7C),
+                                  ),
                                   onPressed: () {
                                     if (_quantity.value > 1) {
                                       _quantity.value--;
@@ -110,7 +119,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.add),
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   onPressed: () {
                                     if (product.stock >= _quantity.value) {
                                       _quantity.value++;
@@ -199,42 +211,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
 
           // Add to Basket Button
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final cartBloc = context.read<CartBloc>();
-                    cartBloc.add(
-                      AddToCartEvent(
-                        cartItem: CartItem.fromProduct(
-                          product,
-                          quantity: _quantity.value,
-                        ),
-                      ),
-                    );
-                    if (cartBloc.state is CartSuccessState) {
-                      ToastMessage.success(message: "Product Added to Cart");
-                    } else {
-                      ToastMessage.failure(message: 'Something went wrong');
-                    }
-                  },
-                  // style: ElevatedButton.styleFrom(
-                  //   backgroundColor: Colors.green,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  // ),
-                  child: const Text(
-                    "Add To Cart",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+          KElevatedButton(
+            onPressed: () {
+              final cartBloc = context.read<CartBloc>();
+              cartBloc.add(
+                AddToCartEvent(
+                  cartItem: CartItem.fromProduct(
+                    product,
+                    quantity: _quantity.value,
                   ),
                 ),
-              ),
-            ),
+              );
+              if (cartBloc.state is CartSuccessState) {
+                ToastMessage.success(message: "Product Added to Cart");
+              } else {
+                ToastMessage.failure(message: 'Something went wrong');
+              }
+            },
+            buttonTitle: "Add to Cart",
           ),
         ],
       ),

@@ -73,10 +73,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     try {
+      await Future.delayed(Duration(milliseconds: 500));
+
       emit(CartLoadingState());
       List<CartItem> cartItems = await cartServices.getProductFromCart();
       int index = cartItems.indexWhere((item) => item.id == event.cartItem.id);
-      if (index != -1 && event.cartItem.stock >= cartItems[index].quantity) {
+      if (index != -1 && event.cartItem.stock > cartItems[index].quantity) {
         cartItems[index].quantity += 1;
         await cartServices.sharedPreferenceManager.insertValue(
           key: SharedPrefKeys.cart,
@@ -94,6 +96,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     try {
+      await Future.delayed(Duration(milliseconds: 500));
       emit(CartLoadingState());
       List<CartItem> cartItems = await cartServices.getProductFromCart();
       int index = cartItems.indexWhere((item) => item.id == event.cartItem.id);
