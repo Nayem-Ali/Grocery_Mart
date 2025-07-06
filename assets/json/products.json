@@ -8,11 +8,7 @@
       "price": 1.99,
       "discountPercentage": 12.62,
       "rating": 4.19,
-      "stock": 8,
-      "weight": 9,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/apple/1.webp"
-      ],
+      "stock": 26,
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/apple/thumbnail.webp"
     },
     {
@@ -24,10 +20,6 @@
       "discountPercentage": 9.61,
       "rating": 4.47,
       "stock": 86,
-      "weight": 10,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/beef-steak/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/thumbnail.webp"
     },
     {
@@ -40,9 +32,6 @@
       "rating": 3.13,
       "stock": 46,
       "weight": 10,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/cat-food/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/cat-food/thumbnail.webp"
     },
     {
@@ -54,11 +43,6 @@
       "discountPercentage": 13.7,
       "rating": 3.19,
       "stock": 97,
-      "weight": 1,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/1.webp",
-        "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/2.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/thumbnail.webp"
     },
     {
@@ -70,10 +54,6 @@
       "discountPercentage": 9.33,
       "rating": 4.8,
       "stock": 10,
-      "weight": 5,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/thumbnail.webp"
     },
     {
@@ -85,10 +65,6 @@
       "discountPercentage": 0.16,
       "rating": 4.07,
       "stock": 84,
-      "weight": 4,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/cucumber/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/cucumber/thumbnail.webp"
     },
     {
@@ -101,9 +77,6 @@
       "rating": 4.55,
       "stock": 71,
       "weight": 10,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/dog-food/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/dog-food/thumbnail.webp"
     },
     {
@@ -116,9 +89,6 @@
       "rating": 2.53,
       "stock": 9,
       "weight": 2,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/eggs/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/eggs/thumbnail.webp"
     },
     {
@@ -131,9 +101,6 @@
       "rating": 3.78,
       "stock": 74,
       "weight": 6,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/fish-steak/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp"
     },
     {
@@ -145,10 +112,6 @@
       "discountPercentage": 0.16,
       "rating": 3.25,
       "stock": 33,
-      "weight": 2,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp"
     },
     {
@@ -160,11 +123,6 @@
       "discountPercentage": 1,
       "rating": 3.66,
       "stock": 3,
-      "weight": 7,
-
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/thumbnail.webp"
     },
     {
@@ -176,10 +134,6 @@
       "discountPercentage": 14.4,
       "rating": 3.97,
       "stock": 34,
-      "weight": 2,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/honey-jar/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/honey-jar/thumbnail.webp"
     },
     {
@@ -191,14 +145,6 @@
       "discountPercentage": 8.69,
       "rating": 3.39,
       "stock": 27,
-      "weight": 1,
-
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/ice-cream/1.webp",
-        "https://cdn.dummyjson.com/product-images/groceries/ice-cream/2.webp",
-        "https://cdn.dummyjson.com/product-images/groceries/ice-cream/3.webp",
-        "https://cdn.dummyjson.com/product-images/groceries/ice-cream/4.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/ice-cream/thumbnail.webp"
     },
     {
@@ -210,10 +156,6 @@
       "discountPercentage": 12.06,
       "rating": 3.94,
       "stock": 50,
-      "weight": 1,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/juice/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/juice/thumbnail.webp"
     },
     {
@@ -225,10 +167,6 @@
       "discountPercentage": 15.22,
       "rating": 4.93,
       "stock": 99,
-      "weight": 5,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/kiwi/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/kiwi/thumbnail.webp"
     },
     {
@@ -240,10 +178,6 @@
       "discountPercentage": 9.7,
       "rating": 3.53,
       "stock": 31,
-      "weight": 3,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/lemon/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/lemon/thumbnail.webp"
     },
     {
@@ -255,10 +189,6 @@
       "discountPercentage": 13.74,
       "rating": 2.61,
       "stock": 27,
-      "weight": 5,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/milk/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/milk/thumbnail.webp"
     },
     {
@@ -270,10 +200,6 @@
       "discountPercentage": 12.87,
       "rating": 4.95,
       "stock": 99,
-      "weight": 5,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/mulberry/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/mulberry/thumbnail.webp"
     },
     {
@@ -285,10 +211,6 @@
       "discountPercentage": 1.59,
       "rating": 4.82,
       "stock": 57,
-      "weight": 6,
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/thumbnail.webp"
     },
     {
@@ -300,11 +222,6 @@
       "discountPercentage": 5.38,
       "rating": 4.81,
       "stock": 13,
-      "weight": 9,
-
-      "images": [
-        "https://cdn.dummyjson.com/product-images/groceries/potatoes/1.webp"
-      ],
       "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/potatoes/thumbnail.webp"
     }
   ]

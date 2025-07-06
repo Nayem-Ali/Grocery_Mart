@@ -1,0 +1,214 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:grocery_mart/core/route/routes_name.dart';
+import 'package:grocery_mart/core/utils/logger/logger.dart';
+import 'package:grocery_mart/core/utils/toast/toast_message.dart';
+import 'package:grocery_mart/features/products/controller/product_bloc.dart';
+import 'package:grocery_mart/features/products/controller/product_event.dart';
+import 'package:grocery_mart/features/products/controller/product_state.dart';
+import 'package:grocery_mart/features/products/view/components/product_card.dart';
+import 'package:grocery_mart/features/shared/widgets/k_text_form_field.dart';
+
+class ExploreProductsScreen extends StatefulWidget {
+  const ExploreProductsScreen({super.key});
+
+  @override
+  State<ExploreProductsScreen> createState() => _ExploreProductsScreenState();
+}
+
+class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProductBloc>().add(GetProductEvent());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Explore Products'),
+        centerTitle: true,
+        actions: [
+          // Sort Button
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              bool ascending = value == 'Low to High';
+              context.read<ProductBloc>().add(
+                SortProductByPriceEvent(doesAscending: ascending),
+              );
+            },
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(
+                    value: 'Low to High',
+                    child: Text('Price: Low to High'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'High to Low',
+                    child: Text('Price: High to Low'),
+                  ),
+                ],
+            icon: const Icon(Icons.sort),
+          ),
+
+          // Filter Button
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () {
+              final state = context.read<ProductBloc>().state;
+              List<String> categories = [];
+
+              if (state is ProductSuccessState) {
+                categories =
+                    state.products.map((e) => e.category).toSet().toList();
+              }
+
+              showModalBottomSheet(
+                backgroundColor: const Color(0xFFF2F3F2),
+                context: context,
+                builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 18.0,
+                      horizontal: 12,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "CATEGORIES",
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                context.pop();
+                                context.read<ProductBloc>().add(
+                                  GetProductEvent(),
+                                );
+                              },
+                              child: const Text("Clear Filter"),
+                            ),
+                          ],
+                        ),
+                        Wrap(
+                          children: [
+                            ...categories.map(
+                              (category) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    final state =
+                                        context.read<ProductBloc>().state;
+                                    if (state is ProductSuccessState) {
+                                      debug("Filtering by category: $category");
+                                      context.read<ProductBloc>().add(
+                                        GetProductByCategoryEvent(
+                                          category: category,
+                                        ),
+                                      );
+                                      context.pop();
+                                    }
+                                  },
+                                  child: Chip(label: Text(category)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              KTextFormField(
+                textEditingController: _searchController,
+                hintText: 'Search',
+                prefixIcon: const Icon(Icons.search),
+                onChange: (value) {
+                  if (_debounce?.isActive ?? false) _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 500), () {
+                    // Call your search/filter logic here
+                    debug('Search query: $value');
+                    context.read<ProductBloc>().add(
+                      SearchProductEvent(searchKey: value),
+                    );
+                    // Example:
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: BlocConsumer<ProductBloc, ProductState>(
+                  listener: (context, state) {
+                    if (state is ProductFailureState) {
+                      ToastMessage.failure(message: 'Something went wrong');
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is ProductLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ProductSuccessState) {
+                      final products = state.products;
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                              mainAxisExtent: 270,
+                            ),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return InkWell(
+                            onTap:
+                                () => context.pushNamed(
+                                  RoutesName.productDetails,
+                                  extra: product,
+                                ),
+                            child: ProductCard(product: product),
+                          );
+                        },
+                      );
+                    } else if (state is ProductFailureState) {
+                      return const Center(child: Text("Something went wrong"));
+                    }
+                    return const Center(child: Text('No products available'));
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
