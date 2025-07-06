@@ -85,4 +85,24 @@ These helped me understand event-state flow and implement BLoC in the project.
 **This project helps to learn about Bloc Pattern**
 
 ## Screenshots
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/f78bafe9-b09e-4f8d-a9ed-c8725f3a1383" alt="Splash Screen" width="200" height="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/ca173799-4fa4-4845-9d91-148b11410dde" alt="Home Screen" width="200" height="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/0c781e52-3a6b-4e43-bd2c-618327324eb0" alt="Category" width="200" height="400"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/f9f449dc-e995-45a6-8d1c-ad6072fb446f" alt="Cart" width="200" height="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/6ec7edd3-81bd-4ca6-b671-adb61c433b26" alt="Product Details" width="200" height="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/d93047a0-eafd-49cf-b56c-0e10318bf128" alt="Categorized Products" width="200" height="400"/></td>
+  </tr>
+</table>
+
+
+
+
+
+
+
 ## Video Demo
