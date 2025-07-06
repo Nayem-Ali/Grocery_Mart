@@ -86,8 +86,6 @@ class ProductCard extends StatelessWidget {
                           ToastMessage.success(
                             message: "Product Added to Cart",
                           );
-                        } else {
-                          ToastMessage.failure(message: 'Something went wrong');
                         }
                       },
                       child: Icon(Icons.add, size: 30, color: Colors.white),

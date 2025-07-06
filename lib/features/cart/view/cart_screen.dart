@@ -89,21 +89,42 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      InkWell(
-                                        onTap: () {
-                                          context.read<CartBloc>().add(
-                                            DecreaseCartItemQuantityEvent(
-                                              cartItem: cartItem,
-                                            ),
-                                          );
-                                        },
-                                        child: Icon(Icons.remove),
+                                      Container(
+                                        height: 30,
+                                        width: 30,
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          border: Border.all(
+                                            color: const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.read<CartBloc>().add(
+                                              DecreaseCartItemQuantityEvent(
+                                                cartItem: cartItem,
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            color: const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        cartItem.quantity.toString(),
+                                        style: const TextStyle(fontSize: 16),
                                       ),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 6,
-                                        ),
+                                        height: 30,
+                                        width: 30,
+
                                         margin: const EdgeInsets.symmetric(
                                           horizontal: 12,
                                         ),
@@ -115,20 +136,20 @@ class _CartScreenState extends State<CartScreen> {
                                             color: Colors.grey,
                                           ),
                                         ),
-                                        child: Text(
-                                          cartItem.quantity.toString(),
-                                          style: const TextStyle(fontSize: 16),
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.read<CartBloc>().add(
+                                              IncreaseCartItemQuantityEvent(
+                                                cartItem: cartItem,
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
                                         ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          context.read<CartBloc>().add(
-                                            IncreaseCartItemQuantityEvent(
-                                              cartItem: cartItem,
-                                            ),
-                                          );
-                                        },
-                                        child: Icon(Icons.add),
                                       ),
                                     ],
                                   ),
