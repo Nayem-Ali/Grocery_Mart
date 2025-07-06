@@ -6,6 +6,7 @@ import 'package:grocery_mart/data/models/cart_item.dart';
 import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
 import 'package:grocery_mart/features/cart/controller/cart_event.dart';
 import 'package:grocery_mart/features/cart/controller/cart_state.dart';
+import 'package:grocery_mart/features/shared/widgets/k_elevated_button.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -34,106 +35,133 @@ class _CartScreenState extends State<CartScreen> {
             }
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                itemCount: state.cartItems.length,
-                itemBuilder: (context, index) {
-                  CartItem cartItem = state.cartItems[index];
-                  return Container(
-                    height: 110,
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      border: Border(top: BorderSide(color: Colors.grey)),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.network(cartItem.thumbnail),
-                        SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              cartItem.title,
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'Category: ${cartItem.category}',
-                              style: Theme.of(context).textTheme.titleSmall
-                                  ?.copyWith(color: Colors.grey),
-                            ),
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    context.read<CartBloc>().add(
-                                      DecreaseCartItemQuantityEvent(
-                                        cartItem: cartItem,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.cartItems.length,
+                      itemBuilder: (context, index) {
+                        CartItem cartItem = state.cartItems[index];
+                        return Container(
+                          height: 110,
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            border: Border(top: BorderSide(color: Colors.grey)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.network(cartItem.thumbnail),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    cartItem.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width: 180,
+                                    child: Text(
+                                      'Category: ${cartItem.category}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: Colors.grey),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          context.read<CartBloc>().add(
+                                            DecreaseCartItemQuantityEvent(
+                                              cartItem: cartItem,
+                                            ),
+                                          );
+                                        },
+                                        child: Icon(Icons.remove),
                                       ),
-                                    );
-                                  },
-                                  child: Icon(Icons.remove),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    // vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: Text(
-                                    cartItem.quantity.toString(),
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    context.read<CartBloc>().add(
-                                      IncreaseCartItemQuantityEvent(
-                                        cartItem: cartItem,
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          cartItem.quantity.toString(),
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
                                       ),
-                                    );
-                                  },
-                                  child: Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                context.read<CartBloc>().add(
-                                  RemoveFromCartEvent(cartItem: cartItem),
-                                );
-                              },
-                              child: Icon(Icons.close),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 2.0),
-                              child: Text(
-                                '\$${cartItem.price}',
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                                      InkWell(
+                                        onTap: () {
+                                          context.read<CartBloc>().add(
+                                            IncreaseCartItemQuantityEvent(
+                                              cartItem: cartItem,
+                                            ),
+                                          );
+                                        },
+                                        child: Icon(Icons.add),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Spacer(),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      context.read<CartBloc>().add(
+                                        RemoveFromCartEvent(cartItem: cartItem),
+                                      );
+                                    },
+                                    child: Icon(Icons.close),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 2.0),
+                                    child: Text(
+                                      '\$${cartItem.price}',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                  KElevatedButton(
+                    onPressed: () {},
+                    buttonTitle: "Go to Checkout",
+                  ),
+                ],
               ),
             );
           } else if (state is CartLoadingState) {

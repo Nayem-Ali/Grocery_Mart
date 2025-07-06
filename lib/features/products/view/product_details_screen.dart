@@ -6,6 +6,7 @@ import 'package:grocery_mart/data/models/product.dart';
 import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
 import 'package:grocery_mart/features/cart/controller/cart_event.dart';
 import 'package:grocery_mart/features/cart/controller/cart_state.dart';
+import 'package:grocery_mart/features/shared/widgets/k_elevated_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -199,42 +200,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
 
           // Add to Basket Button
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final cartBloc = context.read<CartBloc>();
-                    cartBloc.add(
-                      AddToCartEvent(
-                        cartItem: CartItem.fromProduct(
-                          product,
-                          quantity: _quantity.value,
-                        ),
-                      ),
-                    );
-                    if (cartBloc.state is CartSuccessState) {
-                      ToastMessage.success(message: "Product Added to Cart");
-                    } else {
-                      ToastMessage.failure(message: 'Something went wrong');
-                    }
-                  },
-                  // style: ElevatedButton.styleFrom(
-                  //   backgroundColor: Colors.green,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  // ),
-                  child: const Text(
-                    "Add To Cart",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+          KElevatedButton(
+            onPressed: () {
+              final cartBloc = context.read<CartBloc>();
+              cartBloc.add(
+                AddToCartEvent(
+                  cartItem: CartItem.fromProduct(
+                    product,
+                    quantity: _quantity.value,
                   ),
                 ),
-              ),
-            ),
+              );
+              if (cartBloc.state is CartSuccessState) {
+                ToastMessage.success(message: "Product Added to Cart");
+              } else {
+                ToastMessage.failure(message: 'Something went wrong');
+              }
+            },
+            buttonTitle: "Add to Cart",
           ),
         ],
       ),
