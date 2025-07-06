@@ -39,7 +39,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     List<Product> filtered =
         _allProducts
-            .where((product) => product.category == event.category)
+            .where((product) => event.category == product.category)
             .toList();
 
     if (filtered.isNotEmpty) {

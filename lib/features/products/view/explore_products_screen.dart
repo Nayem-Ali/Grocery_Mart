@@ -9,6 +9,7 @@ import 'package:grocery_mart/core/utils/toast/toast_message.dart';
 import 'package:grocery_mart/features/products/controller/product_bloc.dart';
 import 'package:grocery_mart/features/products/controller/product_event.dart';
 import 'package:grocery_mart/features/products/controller/product_state.dart';
+import 'package:grocery_mart/features/products/view/components/category_filter.dart';
 import 'package:grocery_mart/features/products/view/components/product_card.dart';
 import 'package:grocery_mart/features/shared/widgets/k_text_form_field.dart';
 
@@ -77,65 +78,14 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
                     state.products.map((e) => e.category).toSet().toList();
               }
 
-              showModalBottomSheet(
+              showBottomSheet(
                 backgroundColor: const Color(0xFFF2F3F2),
                 context: context,
                 builder: (context) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 18.0,
-                      horizontal: 12,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "CATEGORIES",
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.pop();
-                                context.read<ProductBloc>().add(
-                                  GetProductEvent(),
-                                );
-                              },
-                              child: const Text("Clear Filter"),
-                            ),
-                          ],
-                        ),
-                        Wrap(
-                          children: [
-                            ...categories.map(
-                              (category) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    final state =
-                                        context.read<ProductBloc>().state;
-                                    if (state is ProductSuccessState) {
-                                      debug("Filtering by category: $category");
-                                      context.read<ProductBloc>().add(
-                                        GetProductByCategoryEvent(
-                                          category: category,
-                                        ),
-                                      );
-                                      context.pop();
-                                    }
-                                  },
-                                  child: Chip(label: Text(category)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  return Builder(
+                    builder: (context) {
+                      return CategoryFilter(categories: categories);
+                    },
                   );
                 },
               );

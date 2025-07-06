@@ -16,28 +16,115 @@ class AppTheme {
       onSurface: Colors.black,
     ),
     textTheme: const TextTheme(
+      // Display
+      displayLarge: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 57,
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+      ),
+      displayMedium: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 45,
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+      ),
+      displaySmall: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 36,
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+      ),
+
+      // Headlines
       headlineLarge: TextStyle(
+        // already defined
+        fontFamily: 'Gilroy',
         fontSize: 26,
         fontWeight: FontWeight.bold,
         color: Colors.black,
       ),
+      headlineMedium: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
+      headlineSmall: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
+
+      // Titles
+      titleLarge: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
       titleMedium: TextStyle(
+        // already defined
+        fontFamily: 'Gilroy',
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: Colors.black,
       ),
-      bodyMedium: TextStyle(fontSize: 14, color: Colors.black87),
+      titleSmall: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+
+      // Body
+      bodyLarge: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        color: Colors.black87,
+      ),
+      bodyMedium: TextStyle(
+        // already defined
+        fontFamily: 'Gilroy',
+        fontSize: 14,
+        color: Colors.black87,
+      ),
+      bodySmall: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 12,
+        color: Colors.black54,
+      ),
+
+      // Labels
       labelLarge: TextStyle(
+        // already defined
+        fontFamily: 'Gilroy',
         fontSize: 14,
         fontWeight: FontWeight.bold,
         color: Color(0xFF53B175),
       ),
+      labelMedium: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF53B175),
+      ),
+      labelSmall: TextStyle(
+        fontFamily: 'Gilroy',
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: Color(0xFF53B175),
+      ),
     ),
+
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
       foregroundColor: Colors.black,
       elevation: 0,
       titleTextStyle: TextStyle(
+        fontFamily: 'Gilroy',
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: Colors.black,

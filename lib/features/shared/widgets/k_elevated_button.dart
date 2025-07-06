@@ -24,7 +24,11 @@ class KElevatedButton extends StatelessWidget {
             ),
             child: Text(
               buttonTitle,
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontFamily: 'Gilroy',
+              ),
             ),
           ),
         ),

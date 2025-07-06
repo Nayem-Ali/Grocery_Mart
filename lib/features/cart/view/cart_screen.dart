@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_mart/core/utils/helper/helper_functions.dart';
 import 'package:grocery_mart/core/utils/logger/logger.dart';
 import 'package:grocery_mart/core/utils/toast/toast_message.dart';
 import 'package:grocery_mart/data/models/cart_item.dart';
@@ -16,6 +18,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  double subTotal = 0.0;
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _CartScreenState extends State<CartScreen> {
                       itemCount: state.cartItems.length,
                       itemBuilder: (context, index) {
                         CartItem cartItem = state.cartItems[index];
+                        subTotal += cartItem.quantity * cartItem.price;
                         return Container(
                           height: 110,
                           padding: const EdgeInsets.all(8),
@@ -51,8 +55,14 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           child: Row(
                             children: [
-                              Image.network(cartItem.thumbnail),
-                              SizedBox(width: 10),
+                              CachedNetworkImage(
+                                imageUrl: cartItem.thumbnail,
+                                fit: BoxFit.cover,
+                                errorWidget:
+                                    (context, url, error) =>
+                                        Icon(Icons.image, size: 35),
+                              ),
+                              SizedBox(width: 7),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
@@ -62,13 +72,13 @@ class _CartScreenState extends State<CartScreen> {
                                     cartItem.title,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleLarge
+                                        .titleMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
                                     width: 180,
                                     child: Text(
-                                      'Category: ${cartItem.category}',
+                                      'Stock: ${cartItem.stock}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
@@ -140,12 +150,15 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 2.0),
-                                    child: Text(
-                                      '\$${cartItem.price}',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
+                                    child: SizedBox(
+                                      // width: 150,
+                                      child: Text(
+                                        '\$${(cartItem.price * cartItem.quantity).toStringAsFixed(2)}',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -157,9 +170,33 @@ class _CartScreenState extends State<CartScreen> {
                       },
                     ),
                   ),
-                  KElevatedButton(
-                    onPressed: () {},
-                    buttonTitle: "Go to Checkout",
+                  Stack(
+                    children: [
+                      KElevatedButton(
+                        onPressed: () {},
+                        buttonTitle: "Go to Checkout",
+                      ),
+                      Positioned(
+                        right: 20,
+                        top: 30,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Colors.black12,
+                          ),
+                          child: Text(
+                            '\$${HelperFunctions.calculateSubtotal(state.cartItems)}',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.labelSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
