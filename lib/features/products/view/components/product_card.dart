@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_mart/core/utils/toast/toast_message.dart';
+import 'package:grocery_mart/data/models/cart_item.dart';
 import 'package:grocery_mart/data/models/product.dart';
+import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
+import 'package:grocery_mart/features/cart/controller/cart_event.dart';
+import 'package:grocery_mart/features/cart/controller/cart_state.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product});
@@ -58,8 +64,25 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     color: Theme.of(context).primaryColor,
                   ),
-                  child: const Center(
-                    child: Icon(Icons.add, size: 30, color: Colors.white),
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        final cartBloc = context.read<CartBloc>();
+                        cartBloc.add(
+                          AddToCartEvent(
+                            cartItem: CartItem.fromProduct(product),
+                          ),
+                        );
+                        if (cartBloc.state is CartSuccessState) {
+                          ToastMessage.success(
+                            message: "Product Added to Cart",
+                          );
+                        } else {
+                          ToastMessage.failure(message: 'Something went wrong');
+                        }
+                      },
+                      child: Icon(Icons.add, size: 30, color: Colors.white),
+                    ),
                   ),
                 ),
               ],

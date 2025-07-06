@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_mart/core/utils/toast/toast_message.dart';
+import 'package:grocery_mart/data/models/cart_item.dart';
 import 'package:grocery_mart/data/models/product.dart';
+import 'package:grocery_mart/features/cart/controller/cart_bloc.dart';
+import 'package:grocery_mart/features/cart/controller/cart_event.dart';
+import 'package:grocery_mart/features/cart/controller/cart_state.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -11,8 +17,7 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  int quantity = 1;
-  bool isExpanded = false;
+  final ValueNotifier<int> _quantity = ValueNotifier<int>(1);
 
   @override
   Widget build(BuildContext context) {
@@ -44,61 +49,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
           ),
-          // SizedBox(height: 10),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Text(
-          //         product.title,
-          //         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //       IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
-          //     ],
-          //   ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       // Quantity Controller
-          //       Row(
-          //         children: [
-          //           InkWell(child: const Icon(Icons.remove), onTap: () {}),
-          //
-          //           Container(
-          //             padding: const EdgeInsets.symmetric(
-          //               horizontal: 12,
-          //               vertical: 6,
-          //             ),
-          //             margin: const EdgeInsets.symmetric(horizontal: 12),
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(8),
-          //               border: Border.all(color: Colors.grey),
-          //             ),
-          //             child: Text(
-          //               quantity.toString(),
-          //               style: const TextStyle(fontSize: 16),
-          //             ),
-          //           ),
-          //           InkWell(child: const Icon(Icons.add), onTap: () {}),
-          //         ],
-          //       ),
-          //       Text(
-          //         '\$${product.price.toStringAsFixed(2)}',
-          //         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          //
-          // Spacer(),
           SizedBox(height: 10),
           // Product Info Section
           Expanded(
@@ -132,35 +82,48 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // Quantity Controller
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove),
-                              onPressed: () {
-                                if (quantity > 1) {
-                                  setState(() => quantity--);
-                                }
-                              },
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Text(
-                                quantity.toString(),
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () => setState(() => quantity++),
-                            ),
-                          ],
+                        ValueListenableBuilder(
+                          valueListenable: _quantity,
+                          builder: (context, value, child) {
+                            return Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () {
+                                    if (_quantity.value > 1) {
+                                      _quantity.value--;
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Text(
+                                    _quantity.value.toString(),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {
+                                    if (product.stock >= _quantity.value) {
+                                      _quantity.value++;
+                                    } else {
+                                      ToastMessage.failure(
+                                        message: "Stock limit exceeded",
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
 
                         // Price
@@ -244,7 +207,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add to cart logic
+                    final cartBloc = context.read<CartBloc>();
+                    cartBloc.add(
+                      AddToCartEvent(
+                        cartItem: CartItem.fromProduct(
+                          product,
+                          quantity: _quantity.value,
+                        ),
+                      ),
+                    );
+                    if (cartBloc.state is CartSuccessState) {
+                      ToastMessage.success(message: "Product Added to Cart");
+                    } else {
+                      ToastMessage.failure(message: 'Something went wrong');
+                    }
                   },
                   // style: ElevatedButton.styleFrom(
                   //   backgroundColor: Colors.green,
