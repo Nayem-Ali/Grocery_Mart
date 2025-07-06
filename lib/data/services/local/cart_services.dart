@@ -15,9 +15,13 @@ class CartServices {
       List<String> cartItems =
           sharedPreferenceManager.getValue(key: SharedPrefKeys.cart) ?? [];
       debug(cartItems);
-      if (cartItems.contains(jsonEncode(cartItem.toJson()))) {
+      String newCartItem = jsonEncode(cartItem.toJson());
+      if (cartItems.contains(newCartItem)) {
         return false;
       } else {
+        cartItems.removeWhere(
+          (element) => element.substring(0, 20) == newCartItem.substring(0, 20),
+        );
         cartItems.add(jsonEncode(cartItem.toJson()));
 
         return await sharedPreferenceManager.insertValue(
