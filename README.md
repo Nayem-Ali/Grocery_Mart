@@ -99,10 +99,8 @@ These helped me understand event-state flow and implement BLoC in the project.
   </tr>
 </table>
 
+## Demo Video
 
+Watch the app walkthrough here:  
+[▶️ Grocery Mart Demo Video](https://drive.google.com/file/d/1pYcypfpPgSUZx_6H-HA8zBuOyCQviace/view?usp=drive_link)
 
-
-
-
-
-## Video Demo
